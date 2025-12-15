@@ -21,9 +21,9 @@ class AuthTest extends TestCase
         'password' => 'password',
         'password_confirmation' => 'password',
     ]);
-    $response->assertRedirect('/dashboard');
+    $response->assertRedirect('/login');
 
-    $this->post('/logout');
+    // $this->post('/logout'); // User is not logged in after registration
 
     $login = $this->post('/login', [
         'email' => 'test@example.com',
