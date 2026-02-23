@@ -283,8 +283,8 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 For questions or support, please contact:
 
-- **Email**: your.email@example.com
-- **GitHub**: [@YourUsername](https://github.com/YourUsername)
+- **Email**: najmirza7867@gmail.com
+- **GitHub**: https://najmirza.github.io/Mirza/
 
 ---
 
