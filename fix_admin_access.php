@@ -58,3 +58,4 @@ if (!$adminUser) {
 
 echo "FIX COMPLETED.\n";
 echo "Admin User: {$adminUser->name}, Role: {$adminUser->role->name}\n";
+

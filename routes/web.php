@@ -51,5 +51,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/statistics', [App\Http\Controllers\StatisticsController::class, 'index'])->name('statistics.index');
     Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
 });
+Route::get('goblin',function(){
+    echo "new page";
+});
+Route::get('/home',function(){
+echo "something";
+});
 
+Route::get('/contact', function () {
+    return "Contact Page";
+})->name('contact');
+
+Route::get('/creat',[testController::class,'index']);
 require __DIR__.'/auth.php';

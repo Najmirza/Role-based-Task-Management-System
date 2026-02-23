@@ -292,6 +292,14 @@ body {
     gap: 16px;
 }
 
+/* Goals + Tasks row (dashboard) */
+.goals-tasks-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
 .project-card {
     background: rgba(15, 23, 42, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -353,17 +361,194 @@ body {
     left: 3px;
 }
 
+/* ============================================
+   RESPONSIVE — Tablet (≤ 1024px)
+   ============================================ */
+@media (max-width: 1024px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mini-cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ============================================
+   RESPONSIVE — Mobile (≤ 768px)
+   ============================================ */
 @media (max-width: 768px) {
+
+    /* Layout */
     .dashboard-container {
         grid-template-columns: 1fr;
+        padding: 12px;
+        padding-top: 72px;
+        gap: 12px;
     }
 
+    /* Sidebar is now a fixed drawer — handled in app.blade.php inline styles */
     .sidebar {
-        position: static;
+        position: fixed !important;
     }
 
+    /* Main content */
+    .main-content {
+        gap: 12px;
+    }
+
+    /* ── hide things that moved to the fixed mobile topbar ── */
+    .hide-on-mobile {
+        display: none !important;
+    }
+
+    /* Top bar: greeting on left, + Add Task on right — one row */
+    .top-bar {
+        flex-wrap: nowrap;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .greeting {
+        font-size: 20px;
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .top-actions {
+        flex-shrink: 0;
+        gap: 0;
+    }
+
+
+    /* Cards */
     .cards-grid {
         grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    /* Overall stats: stack vertically */
+    .overall-stats {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .stat-number {
+        font-size: 36px;
+    }
+
+    /* Mini cards: 3-col still fine on mobile */
+    .mini-cards {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .mini-card {
+        padding: 10px 8px;
+    }
+
+    .mini-number {
+        font-size: 18px;
+    }
+
+    /* Task cards */
+    .task-cards {
+        grid-template-columns: 1fr;
+    }
+
+    /* Projects grid */
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Goals + tasks row */
+    .goals-tasks-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* Notification dropdown */
+    .notification-dropdown {
+        width: 290px;
+        right: -50px;
+    }
+
+    /* User dropdown */
+    .user-dropdown {
+        right: -8px;
+        width: 200px;
+    }
+
+    /* Tables: force horizontal scroll */
+    .table-responsive-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* ============================================
+   RESPONSIVE — Small Mobile (≤ 480px)
+   ============================================ */
+@media (max-width: 480px) {
+    .dashboard-container {
+        padding: 8px;
+        padding-top: 68px;
+    }
+
+    .greeting {
+        font-size: 20px;
+    }
+
+    /* Shrink create button label on tiny screens */
+    .create-btn-label {
+        display: none;
+    }
+
+    .mini-cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .mini-number {
+        font-size: 16px;
+    }
+
+    .mini-label {
+        font-size: 10px;
+    }
+
+    /* Progress circle */
+    .progress-circle {
+        width: 90px;
+        height: 90px;
+    }
+
+    .circle-value {
+        font-size: 20px;
+    }
+
+    /* Cards */
+    .card {
+        padding: 12px;
+    }
+
+    .card-title {
+        font-size: 14px;
+    }
+
+    /* Notification dropdown */
+    .notification-dropdown {
+        width: 260px;
+        right: -60px;
     }
 }
 

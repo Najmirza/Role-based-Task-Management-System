@@ -437,7 +437,7 @@
 
         <!-- Testimonial -->
         <section class="section">
-            <div style="max-width: 800px; margin: 0 auto; display: flex; gap: 40px; align-items: center;">
+            <div class="testimonial-inner" style="max-width: 800px; margin: 0 auto; display: flex; gap: 40px; align-items: center;">
                 <div style="width: 200px; height: 200px; border-radius: 20px; background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%); flex-shrink: 0;"></div>
                 <div>
                     <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 16px; color: #fff;">Once we implemented Mirza.Dev, I was amazed to see that some of our projects I thought were going to take weeks to finish were completed in just a matter of days.</h3>

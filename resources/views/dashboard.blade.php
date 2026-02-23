@@ -78,7 +78,7 @@
     </div>
 
     <!-- Month Goals & Tasks Row -->
-    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-top: 20px;">
+    <div class="goals-tasks-grid">
         <!-- Month Goals -->
         <div class="card">
             <div class="card-title">

@@ -21,13 +21,34 @@ class AdminUserSeeder extends Seeder
             $adminRole = Role::create(['name' => 'admin', 'description' => 'Administrator']);
         }
 
-        User::firstOrCreate(
-            ['email' => 'admin@role.com'],
+        // ── Admin Account ──────────────────────────────────────────
+        //  Email   : admin@taskmanager.com
+        //  Password: Admin@1234
+        // ──────────────────────────────────────────────────────────
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@taskmanager.com'],
             [
-                'name' => 'System Admin',
-                'password' => Hash::make('password'),
-                'role_id' => $adminRole->id,
+                'name'     => 'Admin',
+                'password' => Hash::make('Admin@1234'),
+                'role_id'  => $adminRole->id,
             ]
         );
+
+        // If admin already existed with old email, force-update password & role
+        if (!$admin->wasRecentlyCreated) {
+            $admin->update([
+                'password' => Hash::make('Admin@1234'),
+                'role_id'  => $adminRole->id,
+            ]);
+        }
+
+        // ── Keep legacy admin email working too (update its password) ──
+        $legacy = User::where('email', 'admin@role.com')->first();
+        if ($legacy) {
+            $legacy->update([
+                'password' => Hash::make('Admin@1234'),
+                'role_id'  => $adminRole->id,
+            ]);
+        }
     }
 }

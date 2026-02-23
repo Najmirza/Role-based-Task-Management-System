@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <link rel="icon" href="/favicon.png">
     <!-- Modern Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,23 +16,24 @@
     
     <style>
         /* Force Layout Stability */
-        body { margin: 0; background: #0f172a; font-family: 'Inter', sans-serif; }
+        body { margin: 0; background: #0f172a; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
         .dashboard-container {
             display: grid;
-    grid-template-columns: 240px minmax(0, 1fr);
-    min-height: 100vh;
-    width: 100%;
-    max-width: 100vw;
-
-    gap: 20px;
-    padding: 20px;
-    box-sizing: border-box;
-
-    align-items: stretch;
+            grid-template-columns: 240px minmax(0, 1fr);
+            min-height: 100vh;
+            width: 100%;
+            max-width: 100vw;
+            gap: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            align-items: stretch;
         }
 
         .sidebar {
+            width: 240px;
+            min-width: 240px;
+            max-width: 240px;
             position: sticky;
             top: 20px;
             height: calc(100vh - 40px);
@@ -43,37 +44,157 @@
             flex-direction: column;
             padding: 20px;
             backdrop-filter: blur(20px);
-             width: 240px;
-    min-width: 240px;
-    max-width: 240px;
-
-    position: sticky;
-    top: 20px;
-
-    height: calc(100vh - 40px);
-    flex-shrink: 0;
+            flex-shrink: 0;
         }
+
         .main-content {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
 
-    display: flex;
-    flex-direction: column;
+         /* ============================
+           MOBILE NAV BAR
+           ============================ */
+        .mobile-topbar {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            height: 60px;
+            background: rgba(15,23,42,0.97);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            overflow: visible; /* allow dropdown to escape */
+        }
 
-    overflow-x: hidden;
-}
+        .hamburger-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .hamburger-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
-        /* Responsive Breakpoint - Force Tablet/Mobile only */
+        .mobile-logo {
+            font-family: var(--font-display, 'Outfit', sans-serif);
+            font-weight: 700;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        /* Profile avatar active ring when dropdown is open */
+        .profile-pic[aria-label="User menu"]:active,
+        .profile-pic[aria-label="User menu"]:focus {
+            outline: 2px solid rgba(99,102,241,0.7);
+            outline-offset: 2px;
+        }
+
+        /* Sidebar overlay for mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 300;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ============================
+           MOBILE BREAKPOINTS
+           ============================ */
         @media (max-width: 768px) {
+            .mobile-topbar {
+                display: flex;
+            }
+
             .dashboard-container {
                 grid-template-columns: 1fr;
+                padding: 12px;
+                padding-top: 72px; /* space for fixed mobile topbar */
+                gap: 12px;
             }
+
+            /* Sidebar becomes a full-height drawer */
             .sidebar {
-                position: static;
-                height: auto;
-                margin-bottom: 20px;
+                position: fixed;
+                top: 0;
+                left: -280px;
+                width: 260px !important;
+                min-width: 260px !important;
+                max-width: 260px !important;
+                height: 100vh;
+                border-radius: 0 20px 20px 0;
+                z-index: 400;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                overflow-y: auto;
+                padding-top: 24px;
             }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .sidebar-overlay.open {
+                display: block;
+            }
+
+            /* Hide desktop sidebar from grid flow */
+            .sidebar-placeholder { display: none; }
+
+            .main-content {
+                padding: 0;
+            }
+
+            /* Top bar inside main content */
+            .top-bar {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 8px 0;
+            }
+
+            .greeting {
+                font-size: 22px !important;
+                width: 100%;
+            }
+
+            .top-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            /* Notification dropdown: pin to viewport */
+            .notification-dropdown {
+                width: 290px;
+                right: -8px;
+            }
+
+            .user-dropdown {
+                right: -8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-container {
+                padding: 8px;
+                padding-top: 68px;
+            }
+            .create-btn span { display: none; }
         }
     </style>
     
@@ -83,16 +204,186 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body>
+<body x-data="{ sidebarOpen: false }" @keydown.escape.window="sidebarOpen = false">
 
     <!-- Floating Background Blobs -->
     <div class="bg-shape blob-1"></div>
     <div class="bg-shape blob-2"></div>
 
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar">
+        <button class="hamburger-btn" @click="sidebarOpen = !sidebarOpen" aria-label="Toggle menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="mobile-logo">{{ \App\Models\Setting::getValue('site_name', 'Task System') }}</div>
+
+        {{-- Mobile: notification bell with badge --}}
+        @php
+            $mbIsAdmin = Auth::user()->role && Auth::user()->role->name === 'admin';
+            $mbAnnouncements = $mbIsAdmin ? collect() : \App\Models\Announcement::where('is_active', true)->latest()->get();
+            $mbCount = $mbAnnouncements->count();
+            $mbLatestId = $mbAnnouncements->first()->id ?? 0;
+        @endphp
+        <div x-data="{
+                 open: false,
+                 unread: {{ $mbCount }},
+                 latestId: {{ $mbLatestId }},
+                 init() {
+                     const seen = localStorage.getItem('last_seen_announcement_id') || 0;
+                     if (this.latestId <= seen) this.unread = 0;
+                 },
+                 markRead() {
+                     this.open = !this.open;
+                     if (this.unread > 0) {
+                         this.unread = 0;
+                         localStorage.setItem('last_seen_announcement_id', this.latestId);
+                     }
+                 }
+             }"
+             @click.outside="open = false"
+             style="position:relative;">
+
+            <button @click="markRead()" class="icon-btn" style="position:relative;width:36px;height:36px;border-radius:10px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 01-3.46 0"></path></svg>
+                <span x-show="unread > 0" class="notification-badge" x-text="unread"></span>
+            </button>
+
+            {{-- Notification dropdown anchored to topbar --}}
+            <div x-show="open"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 scale-95"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-75"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95"
+                 style="display:none;
+                        position:fixed;
+                        top:66px;
+                        right:60px;
+                        width:min(300px, calc(100vw - 24px));
+                        background:#1e293b;
+                        border:1px solid rgba(255,255,255,0.1);
+                        border-radius:12px;
+                        box-shadow:0 16px 48px rgba(0,0,0,0.6);
+                        z-index:9999;
+                        overflow:hidden;
+                        transform-origin:top right;">
+
+                <div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.05);font-weight:600;color:#fff;font-size:14px;background:rgba(0,0,0,0.2);">
+                    Notifications
+                </div>
+                <div style="max-height:280px;overflow-y:auto;">
+                    @forelse($mbAnnouncements as $announcement)
+                        <a href="{{ route('notifications.index') }}" class="notification-item" style="text-decoration:none;display:block;">
+                            <div style="display:flex;gap:10px;align-items:start;">
+                                <div style="margin-top:2px;
+                                    @if($announcement->type=='info') color:#3b82f6;
+                                    @elseif($announcement->type=='success') color:#10b981;
+                                    @elseif($announcement->type=='warning') color:#f97316;
+                                    @elseif($announcement->type=='danger') color:#ef4444;
+                                    @endif">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                </div>
+                                <div>
+                                    <div style="color:#fff;font-size:13px;font-weight:500;margin-bottom:2px;">{{ $announcement->title }}</div>
+                                    <div style="color:#94a3b8;font-size:12px;line-height:1.4;">{{ Str::limit($announcement->message, 70) }}</div>
+                                    <div style="color:#64748b;font-size:10px;margin-top:3px;">{{ $announcement->created_at->diffForHumans() }}</div>
+                                </div>
+                            </div>
+                        </a>
+                    @empty
+                        <div style="padding:28px;text-align:center;color:#64748b;font-size:13px;">No new notifications</div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+        {{-- Mobile profile avatar with full dropdown --}}
+        <div x-data="{ mobileMenuOpen: false }"
+             @click.outside="mobileMenuOpen = false"
+             style="position: relative;">
+
+            {{-- Avatar trigger --}}
+            <div @click="mobileMenuOpen = !mobileMenuOpen"
+                 class="profile-pic"
+                 style="width:36px;height:36px;font-size:13px;cursor:pointer;user-select:none;"
+                 aria-label="User menu">
+                {{ substr(Auth::user()->name, 0, 1) }}
+            </div>
+
+            {{-- Dropdown panel --}}
+            <div x-show="mobileMenuOpen"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 scale-95"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-75"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95"
+                 style="display:none;
+                        position: fixed;
+                        top: 66px;
+                        right: 12px;
+                        width: min(240px, calc(100vw - 24px));
+                        background: rgba(15,23,42,0.97);
+                        border: 1px solid rgba(255,255,255,0.1);
+                        border-radius: 16px;
+                        padding: 8px;
+                        backdrop-filter: blur(20px);
+                        -webkit-backdrop-filter: blur(20px);
+                        box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+                        z-index: 9999;
+                        transform-origin: top right;">
+
+                {{-- User info header --}}
+                <div style="padding:14px 16px; border-bottom:1px solid rgba(255,255,255,0.07); margin-bottom:6px;">
+                    <div style="font-weight:600; color:#fff; font-size:14px;">{{ Auth::user()->name }}</div>
+                    <div style="font-size:12px; color:#94a3b8; margin-top:2px;">{{ Auth::user()->email }}</div>
+                </div>
+
+                @if(Auth::user()->role && Auth::user()->role->name === 'admin')
+                    <a href="{{ route('admin.dashboard') }}" class="dropdown-item" @click="mobileMenuOpen = false">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+                        Admin Dashboard
+                    </a>
+                @endif
+
+                <a href="{{ route('profile.edit') }}" class="dropdown-item" @click="mobileMenuOpen = false">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Settings
+                </a>
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                            class="dropdown-item"
+                            style="width:100%; text-align:left; border:none; background:none; font-family:inherit; font-size:inherit; cursor:pointer;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Log Out
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" :class="{ 'open': sidebarOpen }" @click="sidebarOpen = false"></div>
+
     <div class="dashboard-container">
 
         <!-- SIDEBAR -->
-        <aside class="sidebar">
+        <aside class="sidebar" :class="{ 'open': sidebarOpen }" @click.self="false">
             <div class="sidebar-logo">
                 <div class="logo-box" style="width: 32px; height: 32px; font-size: 14px;">MN</div>
                 <div style="font-family:var(--font-display); font-weight:700; font-size:18px; color: #fff;">{{ \App\Models\Setting::getValue('site_name', 'Task System') }}</div>
@@ -164,11 +455,13 @@
             <div class="top-bar">
                 <h1 class="greeting">Hi, {{ Auth::user()->name }}!</h1>
                 <div class="top-actions">
-                    <a href="{{ route('tasks.create') }}" class="create-btn" style="text-decoration:none;">
+                    {{-- Desktop: "+ Add Task" button (always visible). On mobile: moved to right --}}
+                    <a href="{{ route('tasks.create') }}" class="create-btn" style="text-decoration:none;margin-left:auto;">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        Create
+                        <span class="create-btn-label">Add Task</span>
                     </a>
-                    <button class="icon-btn">
+                    {{-- Search: desktop only --}}
+                    <button class="icon-btn hide-on-mobile">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
                     </button>
                     @php
@@ -178,7 +471,8 @@
                         $latestId = $announcements->first()->id ?? 0;
                     @endphp
 
-                    <div class="relative" 
+                    {{-- Notification bell: desktop only (mobile has its own in topbar) --}}
+                    <div class="relative hide-on-mobile"
                          x-data="{ 
                             open: false, 
                             unread: {{ $count }}, 
@@ -252,7 +546,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="relative" x-data="{ open: false }" @click.outside="open = false" style="position: relative;">
+                    {{-- Profile M: desktop only (mobile has its own in topbar) --}}
+                    <div class="relative hide-on-mobile" x-data="{ open: false }" @click.outside="open = false" style="position: relative;">
                         <div @click="open = !open" class="profile-pic" style="cursor: pointer;">
                             {{ substr(Auth::user()->name, 0, 1) }}
                         </div>
